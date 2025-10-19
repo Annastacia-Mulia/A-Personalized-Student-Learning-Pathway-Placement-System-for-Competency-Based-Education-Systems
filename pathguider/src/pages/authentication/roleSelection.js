@@ -1,34 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { supabase } from "../../supabase";
 import "../../App.css";
 
 const RoleSelection = () => {
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const [user, setUser] = useState(null);
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    if (user) {
-      const fetchName = async () => {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setFirstName(userSnap.data().firstName || "");
+    const fetchUser = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      setUser(currentUser);
+      if (currentUser) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('firstName')
+          .eq('id', currentUser.id)
+          .single();
+        if (data && data.firstName) {
+          setFirstName(data.firstName);
         }
-      };
-      fetchName();
-    }
-  }, [user]);
+      }
+    };
+    fetchUser();
+  }, []);
 
-  const handleRole = async (role) => {
-    if (!user) return;
-    await setDoc(doc(db, "users", user.uid), { role }, { merge: true });
-    navigate(`/${role}`);
-  };
+ const handleRole = async (role) => {
+  if (!user) return;
+  await supabase
+    .from('users')
+    .update({ role })
+    .eq('id', user.id);
+
+  if (role === "administrator") {
+    navigate("/administrator");
+  } else if (role === "teacher") {
+    navigate("/teacher");
+  } else if (role === "student") {
+    navigate("/student");
+  }
+};
 
   if (!user) return null;
+  // ...existing code...
 
   return (
     <div className="role-selection-page">
