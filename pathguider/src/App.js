@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginApp from "./pages/loginApp";
-import RoleSelection from "./pages/roleSelection";
-import AdminHome from "./pages/adminHome";
-import TeacherHome from "./pages/teacherHome";
-import StudentHome from "./pages/studentHome";
-import Login from "./pages/login";
+import LoginApp from "./pages/authentication/loginApp";
+import SignUp from "./pages/authentication/SignUp";
+import AuthCallback from "./pages/authentication/AuthCallback";
+import LandingPage from "./pages/LandingPage";
+import RoleSelection from "./pages/authentication/roleSelection";
+import AdminHome from "./pages/homescreens/adminHome";
+import Users from "./pages/users/users";
+import Students from "./pages/users/students";
+import Teachers from "./pages/users/teachers";
+import TeacherHome from "./pages/homescreens/teacherHome";
+import StudentHome from "./pages/homescreens/studentHome";
+import Login from "./pages/authentication/login";
+
 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginApp />} />
-        <Route path="/role" element={<RoleSelection />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginApp />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/roleSelection" element={<RoleSelection />} />
         <Route path="/administrator" element={<AdminHome />} />
+        <Route path="/administrator/users" element={<Users />} />
+        <Route path="/administrator/students" element={<Students />} />
+        <Route path="/administrator/teachers" element={<Teachers />} />
         <Route path="/teacher" element={<TeacherHome />} />
         <Route path="/student" element={<StudentHome />} />
       </Routes>
