@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PlacementsList from "../../components/PlacementsList";
 import Notification from "../../components/Notification";
 import Modal from "../../components/Modal";
+import SettingsPage from "../SettingsPage";
 
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -276,39 +277,45 @@ const AdminHome = () => {
             {sidebarOpen ? (
               <>
                 Notifications
-                {pendingAppeals.length > 0 && (
-                  <span style={{
-                    marginLeft: 8,
-                    background: '#ff4b6e',
-                    color: '#fff',
-                    borderRadius: 12,
-                    padding: '2px 10px',
-                    fontSize: 14,
-                    fontWeight: 700
-                  }}>
-                    New!
-                  </span>
-                )}
+                {(() => {
+                  const newCount = notifications.filter(n => !n.seen).length;
+                  return newCount > 0 ? (
+                    <span style={{
+                      marginLeft: 8,
+                      background: '#ff4b6e',
+                      color: '#fff',
+                      borderRadius: 12,
+                      padding: '2px 10px',
+                      fontSize: 14,
+                      fontWeight: 700
+                    }}>
+                      {newCount}
+                    </span>
+                  ) : null;
+                })()}
               </>
             ) : (
               <>
                 🔔
-                {pendingAppeals.length > 0 && (
-                  <span style={{
-                    marginLeft: 4,
-                    background: '#ff4b6e',
-                    color: '#fff',
-                    borderRadius: 12,
-                    padding: '2px 7px',
-                    fontSize: 13,
-                    fontWeight: 700,
-                    display: 'inline-block',
-                    minWidth: 20,
-                    textAlign: 'center'
-                  }}>
-                    {pendingAppeals.length}
-                  </span>
-                )}
+                {(() => {
+                  const newCount = notifications.filter(n => !n.seen).length;
+                  return newCount > 0 ? (
+                    <span style={{
+                      marginLeft: 4,
+                      background: '#ff4b6e',
+                      color: '#fff',
+                      borderRadius: 12,
+                      padding: '2px 7px',
+                      fontSize: 13,
+                      fontWeight: 700,
+                      display: 'inline-block',
+                      minWidth: 20,
+                      textAlign: 'center'
+                    }}>
+                      {newCount}
+                    </span>
+                  ) : null;
+                })()}
               </>
             )}
           </button>
@@ -332,7 +339,7 @@ const AdminHome = () => {
           </button>
           <button 
             className={`sidebar-link ${activeSection === 'settings' ? 'active' : ''}`}
-            onClick={() => setActiveSection("settings")}
+            onClick={() => setActiveSection('settings')}
           >
             {sidebarOpen ? 'Settings' : '⚙️'}
           </button>
@@ -563,14 +570,14 @@ const AdminHome = () => {
                 No notifications yet.
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <ol style={{ paddingLeft: 24, margin: 0 }}>
                 {notifications.map((notif, idx) => (
-                  <div key={notif.appealId + '-' + idx} style={{ background: '#f7f7fa', borderRadius: 8, padding: 16, color: '#603bbb', fontWeight: 500, boxShadow: '0 1px 4px rgba(96,59,187,0.05)' }}>
+                  <li key={notif.appealId + '-' + idx} style={{ background: '#f7f7fa', borderRadius: 8, padding: 16, color: '#603bbb', fontWeight: 500, boxShadow: '0 1px 4px rgba(96,59,187,0.05)', marginBottom: 12 }}>
                     <div>{notif.message}</div>
                     <div style={{ fontSize: 13, color: '#888', marginTop: 4 }}>Appeal from: {notif.studentEmail || 'Unknown'} | {new Date(notif.date).toLocaleString()}</div>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ol>
             )}
           </div>
         )}
@@ -837,32 +844,30 @@ const AdminHome = () => {
         )}
 
         {activeSection === "profile" && (
-          <div>
-            <h2 style={{ color: '#603bbb', marginBottom: 24 }}>Profile</h2>
-            <div style={{ 
-              background: '#fff', 
-              padding: 24, 
-              borderRadius: 8,
-              boxShadow: '0 2px 12px rgba(0,0,0,0.07)'
-            }}>
-              <p><b>Email:</b> {user.email}</p>
-              <p><b>Role:</b> Administrator</p>
-            </div>
+          <div style={{
+            background: '#fff',
+            borderRadius: 10,
+            boxShadow: '0 2px 8px rgba(96,59,187,0.08)',
+            padding: 32,
+            margin: 32,
+            maxWidth: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            minHeight: 180,
+            color: '#603bbb',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <h2 style={{ fontWeight: 700, marginBottom: 18 }}>My Profile</h2>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Name:</b> {user?.user_metadata?.first_name || ''} {user?.user_metadata?.last_name || ''}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Email:</b> {user?.email}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Role:</b> Teacher</div>
           </div>
         )}
 
         {activeSection === "settings" && (
-          <div>
-            <h2 style={{ color: '#603bbb', marginBottom: 24 }}>Settings</h2>
-            <div style={{ 
-              background: '#fff', 
-              padding: 24, 
-              borderRadius: 8,
-              boxShadow: '0 2px 12px rgba(0,0,0,0.07)'
-            }}>
-              <p>Settings coming soon...</p>
-            </div>
-          </div>
+          <SettingsPage user={user} role="admin" />
         )}
       </main>
     </div>

@@ -3,6 +3,7 @@ import "../../App.css";
 import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import SettingsPage from "../SettingsPage"; // Import the SettingsPage component
 
 const StudentHome = () => {
   const navigate = useNavigate();
@@ -145,38 +146,141 @@ const StudentHome = () => {
       <aside style={{width:220,background:'#603bbb',color:'#fff',padding:'32px 0',display:'flex',flexDirection:'column',alignItems:'center',boxShadow:'2px 0 16px rgba(96,59,187,0.08)',height:'100vh',position:'fixed',top:0,left:0,zIndex:100}}>
         <h2 style={{marginBottom:32,fontWeight:800,letterSpacing:1.2}}>Student Menu</h2>
         <nav style={{display:'flex',flexDirection:'column',gap:18,width:'100%',alignItems:'center'}}>
-          <button style={{background:'none',color:'#fff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:600,marginBottom:8}} onClick={() => setActiveSection('home')}>
+          <button
+            style={{
+              background: activeSection === 'home' ? '#fff' : 'none',
+              color: activeSection === 'home' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              boxShadow: activeSection === 'home' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('home')}
+          >
             Home
           </button>
-          <button style={{background:'none',color:'#fff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:600,marginBottom:8}}>
+          <button
+            style={{
+              background: activeSection === 'profile' ? '#fff' : 'none',
+              color: activeSection === 'profile' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              boxShadow: activeSection === 'profile' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('profile')}
+          >
             My Profile
           </button>
-          <button style={{background:'none',color:'#fff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:600,marginBottom:8}}>
+          <button
+            style={{
+              background: activeSection === 'placements' ? '#fff' : 'none',
+              color: activeSection === 'placements' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              boxShadow: activeSection === 'placements' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('placements')}
+          >
             My Placements
           </button>
-          <button style={{background:'none',color:'#fff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:600,marginBottom:8}}>
+          <button
+            style={{
+              background: activeSection === 'appeals' ? '#fff' : 'none',
+              color: activeSection === 'appeals' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              boxShadow: activeSection === 'appeals' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('appeals')}
+          >
             My Appeals
           </button>
-          <button style={{background:'#fff',color:'#603bbb',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:700,marginBottom:8,boxShadow:'0 2px 8px rgba(96,59,187,0.10)'}} onClick={() => setShowAppealModal(true)}>
+          <button style={{color:'#ffffff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:700,marginBottom:8}} onClick={() => setShowAppealModal(true)}>
             Make Appeal
           </button>
-          <button style={{background:'none',color:'#fff',border:'none',fontSize:18,padding:'12px 0',width:'80%',borderRadius:8,cursor:'pointer',fontWeight:600,marginBottom:8,position:'relative'}} onClick={() => setActiveSection('notifications')}>
+          <button
+            style={{
+              background: activeSection === 'notifications' ? '#fff' : 'none',
+              color: activeSection === 'notifications' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              position: 'relative',
+              boxShadow: activeSection === 'notifications' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('notifications')}
+          >
             Notifications
-            {hasUnseen && (
-              <span style={{
-                position: 'absolute',
-                right: 18,
-                top: 8,
-                background: '#ff4b6e',
-                color: '#fff',
-                borderRadius: 12,
-                padding: '2px 10px',
-                fontSize: 14,
-                fontWeight: 700
-              }}>
-                New!
-              </span>
-            )}
+            {hasUnseen && (() => {
+              const newCount = notifications.filter(n => !n.seen).length;
+              return newCount > 0 ? (
+                <span style={{
+                  position: 'absolute',
+                  right: 18,
+                  top: 8,
+                  background: '#ff4b6e',
+                  color: '#fff',
+                  borderRadius: 12,
+                  padding: '2px 10px',
+                  fontSize: 14,
+                  fontWeight: 700
+                }}>
+                  {newCount}
+                </span>
+              ) : null;
+            })()}
+          </button>
+          <button
+            style={{
+              background: activeSection === 'settings' ? '#fff' : 'none',
+              color: activeSection === 'settings' ? '#603bbb' : '#fff',
+              border: 'none',
+              fontSize: 18,
+              padding: '12px 0',
+              width: '80%',
+              borderRadius: 8,
+              cursor: 'pointer',
+              fontWeight: 600,
+              marginBottom: 8,
+              boxShadow: activeSection === 'settings' ? '0 2px 8px rgba(96,59,187,0.10)' : 'none',
+              transition: 'background 0.2s, color 0.2s'
+            }}
+            onClick={() => setActiveSection('settings')}
+          >
+            Settings
           </button>
         </nav>
       </aside>
@@ -190,14 +294,14 @@ const StudentHome = () => {
 
         {activeSection === 'home' && (
           <div className="home-content">
-            <p>Welcome, Student! Here you can view your learning path and progress.</p>
+            <p>Welcome, Student! In your dashboard you can view your pathway placement.</p>
             <div style={{marginTop:32,background:'#fff',color:'#603bbb',borderRadius:12,padding:24,maxWidth:480,margin:'32px auto',boxShadow:'0 2px 12px rgba(96,59,187,0.10)'}}>
               <h3 style={{marginBottom:18}}>Your Placement</h3>
               {loadingPlacement ? (
                 <div>Loading placement...</div>
               ) : placement ? (
                 <div>
-                  <div><b>Pathway:</b> {placement.pathway}</div>
+                  <div><b>Pathway:</b> {placement.pathway ? placement.pathway.toUpperCase() : ''}</div>
                   <div><b>STEM:</b> {placement.stem}</div>
                   <div><b>Social Sciences:</b> {placement.social_sciences}</div>
                   <div><b>Arts:</b> {placement.arts}</div>
@@ -206,11 +310,36 @@ const StudentHome = () => {
                   </button>
                 </div>
               ) : (
-                <div>No placement found.</div>
+                <div>You haven't been placed yet. Check back soon!</div>
               )}
               {appealSuccess && <div style={{color:'green',marginTop:16}}>{appealSuccess}</div>}
               {appealError && <div style={{color:'red',marginTop:16}}>{appealError}</div>}
             </div>
+            <p> In case you are not satisfied with your placement, you can make an appeal.</p>
+            <p> It will be reviewed and potentially adjusted based on your feedback.</p>
+          </div>
+        )}
+
+        {activeSection === 'profile' && (
+          <div style={{
+            background: '#fff',
+            borderRadius: 10,
+            boxShadow: '0 2px 8px rgba(96,59,187,0.08)',
+            padding: 32,
+            margin: 32,
+            maxWidth: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            minHeight: 180,
+            color: '#603bbb',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <h2 style={{ fontWeight: 700, marginBottom: 18 }}>My Profile</h2>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Name:</b> {user?.user_metadata?.first_name || ''} {user?.user_metadata?.last_name || ''}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Email:</b> {user?.email}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Pathway:</b> {placement?.pathway ? placement.pathway.toUpperCase() : 'N/A'}</div>
           </div>
         )}
 
@@ -250,9 +379,24 @@ const StudentHome = () => {
           </div>
         )}
 
+        {activeSection === 'settings' && (
+          <SettingsPage user={user} role="student" />
+        )}
+
         {/* Appeal Modal */}
         <Modal open={showAppealModal} title="Appeal Placement" onClose={() => setShowAppealModal(false)}>
-          <div style={{marginBottom:16}}>Explain why you want your placement changed:</div>
+          <div style={{marginBottom:16}}>Select your desired pathway and explain why you want your placement changed:</div>
+          <select
+            value={placement?.desired_pathway || ''}
+            onChange={e => setPlacement({ ...placement, desired_pathway: e.target.value })}
+            style={{width:'100%',padding:10,borderRadius:6,border:'1px solid #ccc',marginBottom:12}}
+            disabled={appealLoading}
+          >
+            <option value="">Select desired pathway</option>
+            <option value="STEM">STEM</option>
+            <option value="SOCIAL_SCIENCES">SOCIAL SCIENCES</option>
+            <option value="ARTS">ARTS</option>
+          </select>
           <textarea
             value={appealText}
             onChange={e => setAppealText(e.target.value)}
@@ -262,7 +406,7 @@ const StudentHome = () => {
           />
           <div style={{display:'flex',justifyContent:'flex-end',gap:12}}>
             <button onClick={() => setShowAppealModal(false)} style={{padding:'8px 18px'}}>Cancel</button>
-            <button onClick={handleAppealSubmit} style={{padding:'8px 18px',background:'#603bbb',color:'#fff',border:'none',borderRadius:4}} disabled={appealLoading || !appealText.trim()}>
+            <button onClick={handleAppealSubmit} style={{padding:'8px 18px',background:'#603bbb',color:'#fff',border:'none',borderRadius:4}} disabled={appealLoading || !appealText.trim() || !placement?.desired_pathway}>
               Submit Appeal
             </button>
           </div>

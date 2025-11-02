@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import "../../App.css";
 import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
 import Students from "../users/students";
 import PlacementsList from "../../components/PlacementsList";
+import SettingsPage from "../SettingsPage";
 
 // UploadGradesSection component for file upload UI and manual entry
 const UploadGradesSection = ({ onStudentsRefresh }) => {
@@ -270,6 +270,12 @@ const TeacherHome = () => {
           <button className="sidebar-link" onClick={() => setActiveSection("files")}>{sidebarOpen ? 'Uploaded Files' : '📁'}</button>
           <button className="sidebar-link" onClick={() => setActiveSection("placements")}>{sidebarOpen ? 'View All Placements' : '🗂️'}</button>
           <button className="sidebar-link" onClick={handleLogout}>{sidebarOpen ? 'Log Out' : '🚪'}</button>
+          <button
+            className={`sidebar-link ${activeSection === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveSection('settings')}
+          >
+            {sidebarOpen ? 'Settings' : '⚙️'}
+          </button>
         </nav>
       </aside>
       <main className="admin-main-content">
@@ -299,6 +305,31 @@ const TeacherHome = () => {
         )}
         {activeSection === "placements" && (
           <PlacementsList isAdmin={false} />
+        )}
+        {activeSection === 'profile' && (
+          <div style={{
+            background: '#fff',
+            borderRadius: 10,
+            boxShadow: '0 2px 8px rgba(96,59,187,0.08)',
+            padding: 32,
+            margin: 32,
+            maxWidth: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            minHeight: 180,
+            color: '#603bbb',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <h2 style={{ fontWeight: 700, marginBottom: 18 }}>My Profile</h2>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Name:</b> {user?.user_metadata?.first_name || ''} {user?.user_metadata?.last_name || ''}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Email:</b> {user?.email}</div>
+            <div style={{ fontSize: 16, marginBottom: 8 }}><b>Role:</b> Teacher</div>
+          </div>
+        )}
+        {activeSection === 'settings' && (
+          <SettingsPage user={user} role="teacher" />
         )}
       </main>
     </div>
