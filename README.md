@@ -22,7 +22,7 @@ This project is a web-based platform designed to automate and personalize studen
 1. **Clone the repository:**
 	```sh
 	git clone https://github.com/Annastacia-Mulia/A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems.git
-	cd A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems/
+	cd A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems/pathguider
 	```
 2. **Install frontend dependencies:**
 	```sh
@@ -81,13 +81,19 @@ This project is a web-based platform designed to automate and personalize studen
   - `requirements.txt` – Python dependencies
   - `serviceAccountKey.json` – Service account credentials (if needed)
 
+
+## Machine Learning Model
+- `server/train_pathway_model.py`: Script to train and export the pathway placement model.
+- `server/pathguider.pkl`: Trained RandomForestClassifier model (used for automated pathway assignment in backend).
+	- **Note:** Do not commit large or sensitive model files to GitHub. Add `pathguider.pkl` to your `.gitignore`.
+
 ## Key Files
 - `src/App.js`: Main entry point and router for the React app
 - `src/pages/homescreens/adminHome.js`, `teacherHome.js`, `studentHome.js`: Dashboards for each role
-- `src/pages/SettingsPage.js`: Unified settings page for all users
-- `src/components/PasskeySetup.js`: Passkey/WebAuthn registration component
+- `src/components/TotpSetup.js`: 2-Factor Authentication registration component
 - `src/supabase.js`: Supabase client setup
-- `server/app.py`: Backend API logic
+- `server/app.py`: Backend API logic that runs the Python placement module
+- `server/train_pathway_model.py`: Setup for training the model
 
 ---
 For more details, see the inline comments in the code and the [MIGRATION_GUIDE.md](../MIGRATION_GUIDE.md) if migrating from a previous version.
