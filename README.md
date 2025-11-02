@@ -22,7 +22,7 @@ This project is a web-based platform designed to automate and personalize studen
 1. **Clone the repository:**
 	```sh
 	git clone https://github.com/Annastacia-Mulia/A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems.git
-	cd A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems/pathguider
+	cd A-Personalized-Student-Learning-Pathway-Placement-System-for-Competency-Based-Education-Systems/
 	```
 2. **Install frontend dependencies:**
 	```sh
